@@ -14,8 +14,14 @@ function renderMath(el) {
   }
 }
 
+// The model occasionally forgets a closing "$"; close it so KaTeX still renders.
+function fixDollars(text) {
+  const singles = String(text ?? '').replace(/\$\$/g, '').match(/(?<!\\)\$/g)?.length ?? 0;
+  return singles % 2 ? `${text}$` : String(text ?? '');
+}
+
 function setText(el, text) {
-  el.textContent = text ?? '';
+  el.textContent = fixDollars(text);
   renderMath(el);
 }
 
@@ -80,6 +86,7 @@ function showProblem(p) {
   setText($('title'), p.title);
   setText($('context'), p.context);
   setText($('question'), p.question);
+  $('units').textContent = p.units ? `(${p.units})` : '';
 
   $('steps-box').hidden = !p.steps?.length;
   fillList($('steps'), p.steps ?? []);
@@ -127,7 +134,7 @@ $('answer-form').addEventListener('submit', async (e) => {
       answer,
     });
     box.classList.add(verdict);
-    const label = { correct: 'Correct!', partial: 'Partly correct', incorrect: 'Not quite', empty: 'No number found' }[verdict];
+    const label = { correct: 'Correct!', incorrect: 'Not quite', empty: 'No number found' }[verdict];
     setText(box, `${label} ${feedback}`);
   } catch (err) {
     box.classList.add('incorrect');

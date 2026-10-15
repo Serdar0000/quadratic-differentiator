@@ -1,6 +1,6 @@
 import { generateJson, errorResponse, HttpError } from '../lib/gemini.js';
 import { feedbackPrompt, LEVELS } from '../lib/prompts.js';
-import { expectedAnswers, gradeAnswer, validateProblem } from '../lib/math.js';
+import { triangleArea, gradeAnswer, validateProblem } from '../lib/math.js';
 
 export async function POST(request) {
   try {
@@ -10,16 +10,17 @@ export async function POST(request) {
     if (typeof answer !== 'string' || !answer.trim()) throw new HttpError(400, 'answer is required');
 
     // Grading is deterministic; the AI only explains.
-    const expected = expectedAnswers(problem, level);
-    const grade = gradeAnswer(answer.slice(0, 200), expected);
+    const area = triangleArea(problem.triangle);
+    const grade = gradeAnswer(answer.slice(0, 200), area);
 
     const { feedback } = await generateJson({
       system: feedbackPrompt(level),
       user: JSON.stringify({
         task: problem.context,
         question: problem.question,
-        equation: problem.equation,
-        correct_answers: expected,
+        triangle: problem.triangle,
+        correct_area: area,
+        units: problem.units,
         student_answer: answer.slice(0, 200),
         verdict: grade.verdict,
       }),

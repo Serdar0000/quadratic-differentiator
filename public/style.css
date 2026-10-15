@@ -91,6 +91,7 @@ button:disabled { opacity: 0.55; cursor: default; }
 }
 .card h2 { margin-top: 0; }
 .question { font-weight: 600; }
+.units { font-weight: 400; color: var(--muted); }
 
 label { display: block; font-weight: 600; margin: 16px 0 6px; }
 .row { display: flex; gap: 8px; }
@@ -107,7 +108,6 @@ input {
 
 .feedback { margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--bg); }
 .feedback.correct { background: var(--ok-soft); color: var(--ok); }
-.feedback.partial { background: var(--warn-soft); color: var(--warn); }
 .feedback.incorrect, .feedback.empty { background: var(--bad-soft); color: var(--bad); }
 
 .actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }

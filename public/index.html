@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quadratic Differentiator</title>
+  <title>Triangle Area Differentiator</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
   <link rel="stylesheet" href="style.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
@@ -12,8 +12,8 @@
 </head>
 <body>
   <header>
-    <h1>Quadratic Differentiator</h1>
-    <p class="sub">One core task, solving $ax^2 + bx + c = 0$, adapted by AI to your level.</p>
+    <h1>Triangle Area Differentiator</h1>
+    <p class="sub">One core task, finding the area of a triangle, adapted by AI to your level.</p>
   </header>
 
   <main>
@@ -43,9 +43,9 @@
       </div>
 
       <form id="answer-form">
-        <label for="answer">Your answer</label>
+        <label for="answer">Area <span id="units" class="units"></span></label>
         <div class="row">
-          <input id="answer" autocomplete="off" placeholder="e.g. x = 2, x = -3  (fractions like 3/2 or decimals to 2 places)" />
+          <input id="answer" autocomplete="off" placeholder="e.g. 24, 10.83 or 25√3/4" />
           <button type="submit" class="primary">Check</button>
         </div>
       </form>
