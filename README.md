@@ -33,7 +33,7 @@ Browser            ──POST /api/check {answer}───▶  graded by code, e
 
 ## Tech stack
 
-Plain HTML/CSS/JS, KaTeX for formulas, Vercel serverless functions (Node.js), Google Gemini API.
+Plain HTML/CSS/JS, KaTeX for formulas, Vercel serverless functions (Node.js), Google Gemini API (`gemini-3.8-flash` via the Interactions API).
 No build step and no npm dependencies.
 
 ## Run locally

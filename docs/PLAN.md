@@ -70,5 +70,7 @@ gh repo create quadratic-differentiator --public --source=. --push
 |---|---|
 | `GEMINI_API_KEY is not set` | Нет ключа в `.env` (локально) или в Vercel → Settings → Environment Variables. После добавления нужен Redeploy |
 | `Gemini request failed (429)` | Превышен лимит бесплатного тарифа, подожди минуту |
-| `Gemini request failed (404)` | Модель переименована: задай `GEMINI_MODEL` (актуальные названия есть на ai.google.dev) |
+| `Gemini request failed (404)` | Модель недоступна: задай `GEMINI_MODEL` (по умолчанию `gemini-3.8-flash`) |
+| `Gemini request failed (503)` | Высокая нагрузка на Google, попробуй ещё раз через минуту |
+| Генерация идёт 30–80 с | Это нормально для бесплатного тарифа: модель «думает» перед ответом |
 | Формулы показываются как `$x^2$` | Не загрузился KaTeX с CDN, проверь интернет или блокировщик |

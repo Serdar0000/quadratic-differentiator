@@ -15,7 +15,6 @@ export async function POST(request) {
 
     const { feedback } = await generateJson({
       system: feedbackPrompt(level),
-      temperature: 0.4,
       user: JSON.stringify({
         task: problem.context,
         question: problem.question,

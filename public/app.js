@@ -62,7 +62,7 @@ $('generate').addEventListener('click', generate);
 
 async function generate() {
   $('generate').disabled = true;
-  setStatus('Generating a task…');
+  setStatus('Generating a task… this can take up to a minute.');
   try {
     const { problem } = await api('/api/generate', { level: state.level });
     state.problem = problem;
@@ -119,7 +119,7 @@ $('answer-form').addEventListener('submit', async (e) => {
   const box = $('feedback');
   box.hidden = false;
   box.className = 'feedback';
-  box.textContent = 'Checking…';
+  box.textContent = 'Checking your answer…';
   try {
     const { verdict, feedback } = await api('/api/check', {
       level: state.level,
