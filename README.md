@@ -41,7 +41,7 @@ Browser            ──POST /api/check {answer}───▶  graded by code, e
 
 ## Tech stack
 
-Plain HTML/CSS/JS, KaTeX for formulas, Vercel serverless functions (Node.js), Google Gemini API
+Plain HTML/CSS/JS with canvas animations (no libraries), KaTeX for formulas, Vercel serverless functions (Node.js), Google Gemini API
 (Interactions API, several Gemini Flash / Flash-Lite models). No build step and no npm dependencies.
 
 ## Run locally
@@ -70,7 +70,8 @@ lib/prompts.js    system prompts, the core of the differentiation
 lib/math.js       triangle area (4 methods), validator, answer parser and grader
 lib/gemini.js     Gemini Interactions API client with model fallback chain
 lib/fallback.js   offline task generator and feedback (used when AI is unavailable)
-public/           front-end (index.html, app.js, style.css)
+public/           front-end: index.html, style.css, app.js (UI and API calls),
+                  prism.js (3D prism in the header), sketch.js (animated diagram of each task)
 dev-server.js     local server that mimics Vercel
 test/             unit tests
 ```

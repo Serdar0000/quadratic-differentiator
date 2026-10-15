@@ -2,67 +2,148 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#050706" />
   <title>Triangle Area Differentiator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Onest:wght@400;500;600;700&family=Martian+Mono:wght@400;500;600&family=Shantell+Sans:wght@600;800&display=swap" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
   <link rel="stylesheet" href="style.css" />
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
-  <script defer src="app.js"></script>
+  <script type="module" src="app.js"></script>
 </head>
-<body>
-  <header>
-    <h1>Triangle Area Differentiator</h1>
-    <p class="sub">One core task, finding the area of a triangle, adapted by AI to your level.</p>
-  </header>
+<body data-level="1">
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <svg viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M5 28 L17 6 L29 28 Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M17 6 L17 28" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 2.5" opacity=".7"/><rect x="17" y="24" width="4" height="4" stroke="currentColor" stroke-width="1.2"/></svg>
+        <div>
+          <h1>Triangle Area Differentiator</h1>
+          <small>one task · three levels · checked by code</small>
+        </div>
+      </div>
+    </header>
 
-  <main>
-    <section class="levels" role="radiogroup" aria-label="Difficulty level">
-      <button class="level active" data-level="1" role="radio" aria-checked="true">
-        <strong>Level 1</strong><span>Foundation</span>
-      </button>
-      <button class="level" data-level="2" role="radio" aria-checked="false">
-        <strong>Level 2</strong><span>Standard</span>
-      </button>
-      <button class="level" data-level="3" role="radio" aria-checked="false">
-        <strong>Level 3</strong><span>Advanced</span>
-      </button>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="kicker">Practice · area of a triangle</span>
+        <h2>Every triangle, <em>at your level.</em></h2>
+        <p>Pick a level and the AI writes an area problem for it: base and height, a formula you have to choose, or a real situation you model yourself.</p>
+        <div class="hero-stats">
+          <div><b>3</b><span>levels</span></div>
+          <div><b>S = ½ah</b><span>where it starts</span></div>
+          <div><b>4</b><span>formulas</span></div>
+        </div>
+      </div>
+      <div class="prism-box" id="prism-box">
+        <canvas id="prism" aria-label="Rotating 3D triangular prism with sides 3, 4 and 5"></canvas>
+        <span class="prism-hint">Drag to rotate</span>
+      </div>
     </section>
 
-    <button id="generate" class="primary">Generate task</button>
-    <p id="status" class="status" aria-live="polite"></p>
+    <section class="levels" role="radiogroup" aria-label="Difficulty level" id="levels"></section>
 
-    <article id="task" class="card" hidden>
-      <h2 id="title"></h2>
-      <p id="context"></p>
-      <p id="question" class="question"></p>
-
-      <div id="steps-box" hidden>
-        <h3>Step by step</h3>
-        <ol id="steps"></ol>
-      </div>
-
-      <form id="answer-form">
-        <label for="answer">Area <span id="units" class="units"></span></label>
-        <div class="row">
-          <input id="answer" autocomplete="off" placeholder="e.g. 24, 10.83 or 25√3/4" />
-          <button type="submit" class="primary">Check</button>
+    <div class="main">
+      <article class="sheet" id="sheet" aria-live="polite" aria-busy="true">
+        <div class="margin-col">
+          <span class="task-no" id="task-no">№ 1</span>
+          <span class="mark" id="mark" aria-hidden="true"></span>
         </div>
-      </form>
-      <div id="feedback" class="feedback" hidden></div>
 
-      <div class="actions">
-        <button id="hint-btn">Show hint</button>
-        <button id="solution-btn">Show solution</button>
-      </div>
-      <ol id="hints" class="hints"></ol>
-      <div id="solution-box" hidden>
-        <h3>Worked solution</h3>
-        <ol id="solution"></ol>
-      </div>
-    </article>
-  </main>
+        <div class="sheet-head">
+          <div class="chips">
+            <span class="eyebrow" id="eyebrow">Level 1 · Foundation</span>
+            <span class="chip-offline" id="offline" hidden>Built-in task · AI busy</span>
+          </div>
+          <button class="btn-new" id="new-task" type="button">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2.5v3h-3"/></svg>
+            New task
+          </button>
+        </div>
 
-  <footer>Problems and explanations are AI-generated; answers are verified by code.</footer>
+        <div class="loading" id="loading">
+          <p class="loading-text" id="loading-text">Writing a level 1 task…</p>
+          <span class="skel w70"></span><span class="skel w90"></span><span class="skel w50"></span>
+        </div>
+
+        <div class="error" id="error" hidden>
+          <p id="error-text"></p>
+          <button class="btn-ghost" id="retry" type="button">Try again</button>
+        </div>
+
+        <div id="task" hidden>
+          <h2 id="title"></h2>
+          <p class="context" id="context"></p>
+          <p class="question" id="question"></p>
+
+          <div class="block" id="steps-block">
+            <div class="block-label"><span id="steps-label">Step by step</span><span id="steps-count"></span></div>
+            <ol class="steps" id="steps"></ol>
+            <p class="no-scaffold" id="no-scaffold" hidden>No scaffold at this level. Work out what is missing, find it, then choose your area formula.</p>
+          </div>
+
+          <form class="block" id="answer-form" autocomplete="off">
+            <div class="block-label"><label for="answer">Area <span id="units"></span></label></div>
+            <div class="answer-row">
+              <div class="answer-field">
+                <input id="answer" placeholder="e.g. 24, 10.83 or 25√3/4" />
+                <span class="format-tip">A number, a fraction or a root. Decimals to 2 places; units are optional.</span>
+              </div>
+              <button class="btn-check" id="check" type="submit">Check</button>
+            </div>
+          </form>
+          <div class="feedback" id="feedback" hidden><span class="verdict" id="verdict"></span><p id="fb-text"></p></div>
+
+          <div class="help">
+            <button class="btn-ghost" id="hint-btn" type="button"><span id="hint-label">Show a hint</span><span class="pips" id="pips"></span></button>
+            <button class="btn-ghost" id="sol-btn" type="button" aria-expanded="false">Show worked solution</button>
+          </div>
+          <ol class="hints" id="hints"></ol>
+          <ol class="solution" id="solution" hidden></ol>
+        </div>
+      </article>
+
+      <aside class="aside">
+        <section class="panel">
+          <div class="panel-head">
+            <h3>Sketch</h3>
+            <button class="btn-replay" id="replay" type="button"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 2.5v3h-3"/></svg>Replay</button>
+          </div>
+          <p class="sub" id="sketch-sub">What you know, and the area you need.</p>
+          <div class="sketch-box">
+            <canvas id="sketch" aria-label="Diagram of the task's triangle"></canvas>
+            <div class="sketch-lock" id="sketch-lock" hidden><div><strong>Draw it yourself first</strong>At this level the sketch appears after you answer or open the solution. Turning the story into a triangle is the task.</div></div>
+          </div>
+          <div class="legend">
+            <span><i class="lg-given"></i>given</span>
+            <span><i class="lg-height"></i>height</span>
+            <span><i class="lg-area"></i>area</span>
+          </div>
+        </section>
+        <section class="panel">
+          <h3><span class="dot"></span>At this level</h3>
+          <ul class="facts" id="facts"></ul>
+        </section>
+        <p class="foot">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M8 1.5 2.5 4v4c0 3.2 2.4 5.6 5.5 6.5 3.1-.9 5.5-3.3 5.5-6.5V4L8 1.5Z"/><path d="m5.5 8 1.8 1.8L10.5 6.5" stroke-linecap="round"/></svg>
+          Tasks and explanations come from AI. Answers are checked by code.
+        </p>
+      </aside>
+    </div>
+
+    <footer class="credit">
+      <div class="credit-who">
+        <svg viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M5 28 L17 6 L29 28 Z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+        <div>
+          <span class="credit-label">Developed by</span>
+          <span class="credit-name">Aisaule Yerzhankyzy</span>
+        </div>
+      </div>
+      <span class="credit-mail">240105112@sdu.edu.kz</span>
+      <span class="credit-meta">AI for Differentiated Learning · 2026</span>
+    </footer>
+  </div>
 </body>
 </html>
