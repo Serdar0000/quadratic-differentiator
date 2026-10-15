@@ -1,0 +1,14 @@
+{
+  "name": "quadratic-differentiator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AI-powered differentiated practice for quadratic equations",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env dev-server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

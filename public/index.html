@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quadratic Differentiator</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Quadratic Differentiator</h1>
+    <p class="sub">One core task, solving $ax^2 + bx + c = 0$, adapted by AI to your level.</p>
+  </header>
+
+  <main>
+    <section class="levels" role="radiogroup" aria-label="Difficulty level">
+      <button class="level active" data-level="1" role="radio" aria-checked="true">
+        <strong>Level 1</strong><span>Foundation</span>
+      </button>
+      <button class="level" data-level="2" role="radio" aria-checked="false">
+        <strong>Level 2</strong><span>Standard</span>
+      </button>
+      <button class="level" data-level="3" role="radio" aria-checked="false">
+        <strong>Level 3</strong><span>Advanced</span>
+      </button>
+    </section>
+
+    <button id="generate" class="primary">Generate task</button>
+    <p id="status" class="status" aria-live="polite"></p>
+
+    <article id="task" class="card" hidden>
+      <h2 id="title"></h2>
+      <p id="context"></p>
+      <p id="question" class="question"></p>
+
+      <div id="steps-box" hidden>
+        <h3>Step by step</h3>
+        <ol id="steps"></ol>
+      </div>
+
+      <form id="answer-form">
+        <label for="answer">Your answer</label>
+        <div class="row">
+          <input id="answer" autocomplete="off" placeholder="e.g. x = 2, x = -3  (fractions like 3/2 or decimals to 2 places)" />
+          <button type="submit" class="primary">Check</button>
+        </div>
+      </form>
+      <div id="feedback" class="feedback" hidden></div>
+
+      <div class="actions">
+        <button id="hint-btn">Show hint</button>
+        <button id="solution-btn">Show solution</button>
+      </div>
+      <ol id="hints" class="hints"></ol>
+      <div id="solution-box" hidden>
+        <h3>Worked solution</h3>
+        <ol id="solution"></ol>
+      </div>
+    </article>
+  </main>
+
+  <footer>Problems and explanations are AI-generated; answers are verified by code.</footer>
+</body>
+</html>
