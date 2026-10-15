@@ -4,7 +4,7 @@ An AI-powered web app that takes one core maths task, **finding the area of a tr
 and adapts it into three levels of difficulty, with hints, worked solutions and instant
 feedback tailored to each level.
 
-**Live demo:** _https://YOUR-PROJECT.vercel.app_ (add after deploying)
+**Live demo:** https://triangle-area-differentiator.vercel.app
 
 | Level | What the learner gets |
 |---|---|
