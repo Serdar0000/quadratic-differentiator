@@ -32,12 +32,17 @@ Browser            ──POST /api/check {answer}───▶  graded by code, e
 - **Feedback** (`api/check.js`): the student's answer is graded by code (0.5% tolerance, accepts
   `10.83`, `25/2`, `6√3`, `25*sqrt(3)/4`). Gemini only writes the explanation, in a style that
   depends on the level, and is told not to reveal the answer.
+- **Never stuck on rate limits** (`lib/gemini.js`, `lib/fallback.js`): free-tier quotas are per model,
+  so requests walk down a model list (`gemini-3.5-flash-lite` → `gemini-3.1-flash-lite` →
+  `gemini-3.7-flash` → `gemini-3.8-flash`). A model that returns 429/503 or times out is skipped for a while.
+  If every model is unavailable, a built-in template generator creates the task and code-written
+  feedback is shown, so the site keeps working.
 - **Security:** the API key lives only in a server-side environment variable.
 
 ## Tech stack
 
 Plain HTML/CSS/JS, KaTeX for formulas, Vercel serverless functions (Node.js), Google Gemini API
-(`gemini-3.8-flash` via the Interactions API). No build step and no npm dependencies.
+(Interactions API, several Gemini Flash / Flash-Lite models). No build step and no npm dependencies.
 
 ## Run locally
 
@@ -63,7 +68,8 @@ api/generate.js   generate a task for a level (with verification and retry)
 api/check.js      grade an answer and return AI feedback
 lib/prompts.js    system prompts, the core of the differentiation
 lib/math.js       triangle area (4 methods), validator, answer parser and grader
-lib/gemini.js     minimal Gemini Interactions API client
+lib/gemini.js     Gemini Interactions API client with model fallback chain
+lib/fallback.js   offline task generator and feedback (used when AI is unavailable)
 public/           front-end (index.html, app.js, style.css)
 dev-server.js     local server that mimics Vercel
 test/             unit tests

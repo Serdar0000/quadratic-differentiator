@@ -68,13 +68,13 @@ $('generate').addEventListener('click', generate);
 
 async function generate() {
   $('generate').disabled = true;
-  setStatus('Generating a task… this can take up to a minute.');
+  setStatus('Generating a task…');
   try {
     const { problem } = await api('/api/generate', { level: state.level });
     state.problem = problem;
     state.hintsShown = 0;
     showProblem(problem);
-    setStatus('');
+    setStatus(problem.source === 'offline' ? 'The AI is busy right now, so this is a built-in practice task.' : '');
   } catch (err) {
     setStatus(err.message, true);
   } finally {

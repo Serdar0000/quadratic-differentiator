@@ -1,6 +1,7 @@
-import { generateJson, errorResponse, HttpError } from '../lib/gemini.js';
+import { generateJson, errorResponse, HttpError, AiUnavailableError } from '../lib/gemini.js';
 import { feedbackPrompt, LEVELS } from '../lib/prompts.js';
 import { triangleArea, gradeAnswer, validateProblem } from '../lib/math.js';
+import { offlineFeedback } from '../lib/fallback.js';
 
 export async function POST(request) {
   try {
@@ -13,18 +14,26 @@ export async function POST(request) {
     const area = triangleArea(problem.triangle);
     const grade = gradeAnswer(answer.slice(0, 200), area);
 
-    const { feedback } = await generateJson({
-      system: feedbackPrompt(level),
-      user: JSON.stringify({
-        task: problem.context,
-        question: problem.question,
-        triangle: problem.triangle,
-        correct_area: area,
-        units: problem.units,
-        student_answer: answer.slice(0, 200),
-        verdict: grade.verdict,
-      }),
-    });
+    let feedback;
+    try {
+      ({ feedback } = await generateJson({
+        system: feedbackPrompt(level),
+        user: JSON.stringify({
+          task: problem.context,
+          question: problem.question,
+          triangle: problem.triangle,
+          correct_area: area,
+          units: problem.units,
+          student_answer: answer.slice(0, 200),
+          verdict: grade.verdict,
+        }),
+      }));
+    } catch (err) {
+      if (!(err instanceof AiUnavailableError)) throw err;
+    }
+    if (typeof feedback !== 'string' || !feedback) {
+      feedback = offlineFeedback(level, grade.verdict, grade.given, area);
+    }
 
     return Response.json({ verdict: grade.verdict, feedback });
   } catch (err) {

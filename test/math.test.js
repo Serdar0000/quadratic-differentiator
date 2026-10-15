@@ -54,3 +54,14 @@ test('gradeAnswer verdicts', () => {
   assert.equal(gradeAnswer('1500 m²', 1497.6).verdict, 'correct'); // rounding a large area
   assert.equal(gradeAnswer('', 5).verdict, 'empty');
 });
+
+test('offline generator always produces valid tasks', async () => {
+  const { offlineProblem, offlineFeedback } = await import('../lib/fallback.js');
+  for (const level of [1, 2, 3]) {
+    for (let i = 0; i < 200; i++) {
+      const p = offlineProblem(level);
+      assert.deepEqual(validateProblem(p, level), [], `level ${level}: ${JSON.stringify(p.triangle)}`);
+    }
+  }
+  assert.match(offlineFeedback(1, 'incorrect', [40], 20), /double/);
+});
